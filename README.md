@@ -47,14 +47,14 @@ Cybersecurity Student · Ethical Hacking · OSINT · Offensive Security
 ### 🌐 Personal Cybersecurity Portfolio
 Live portfolio site built with pure HTML, CSS, and vanilla JS — no frameworks, no build tools, no dependencies. Showcases projects, certifications, and skills. Deployed via GitHub Pages.  
 `HTML` `CSS` `JavaScript` `GitHub Pages`  
-[🔗 hamidshafiq1.github.io](https://hamidshafiq1.github.io)
+[🔗 hamidshafiq7.github.io](https://hamidshafiq7.github.io)
 
 ---
 
 ### 🔢 Scientific Calculator (C++17)
 Multi-file C++17 scientific calculator with live GitHub Pages web interface. Covers modular design, OOP principles, and clean build architecture.  
 `C++17` `OOP` `GitHub Pages` `Multi-file Architecture`  
-[🔗 hamidshafiq1/scientific-calculator-cpp](https://github.com/hamidshafiq1/scientific-calculator)
+[🔗 hamidshafiq1/scientific-calculator-cpp](https://github.com/hamidshafiq7/scientific-calculator)
 
 ---
 
