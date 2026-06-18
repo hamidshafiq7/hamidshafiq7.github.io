@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Hamid Shafiq — BS Cybersecurity student, penetration tester, CTF player, hardware hacker. University of Haripur '28."/>
+<meta name="keywords" content="Hamid Shafiq, cybersecurity, penetration testing, CTF, ethical hacking, Pakistan"/>
+<meta property="og:title" content="Hamid Shafiq | Cybersecurity"/>
+<meta property="og:description" content="BS Cybersecurity @ UOH '28 — Pen tester, CTF player, hardware hacker."/>
+<meta property="og:url" content="https://hamidshafiq1.github.io"/>
+<meta property="og:type" content="website"/>
+<title>Hamid Shafiq | Cybersecurity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:     #080b0f;
+  --bg2:    #0d1117;
+  --bg3:    #111820;
+  --blue:   #0078d4;
+  --blue2:  #2b88d8;
+  --green:  #39ff14;
+  --red:    #ff4444;
+  --text:   #c9d1d9;
+  --muted:  #6e7681;
+  --border: #21262d;
+  --mono:   'Share Tech Mono', monospace;
+  --sans:   'Rajdhani', sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── Cursor ───────────────────────────────── */
+.cursor {
+  width: 10px; height: 10px;
+  background: var(--blue);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid var(--blue);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.15s ease;
+  opacity: 0.6;
+}
+@media (hover: none) {
+  .cursor, .cursor-ring { display: none; }
+  body { cursor: auto; }
+}
+
+/* ── Scanline + Noise ─────────────────────── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ── Nav ──────────────────────────────────── */
+nav {
+  position: fixed; top: 0; width: 100%;
+  padding: 16px 48px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(8,11,15,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  z-index: 500;
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 17px;
+  color: var(--blue);
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.nav-logo span { color: var(--text); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--blue);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--blue); }
+.nav-links a:hover::after { width: 100%; }
+
+/* ── Hamburger ────────────────────────────── */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-toggle span {
+  display: block;
+  width: 22px; height: 1px;
+  background: var(--muted);
+  transition: all 0.3s;
+}
+.nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); background: var(--blue); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); background: var(--blue); }
+.mobile-menu {
+  display: none;
+  position: fixed; top: 57px; left: 0; right: 0;
+  background: rgba(8,11,15,0.98);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 24px;
+  z-index: 499;
+  backdrop-filter: blur(12px);
+}
+.mobile-menu.open { display: block; }
+.mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+.mobile-menu a {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 2px;
+  transition: color 0.2s;
+}
+.mobile-menu a:hover { color: var(--blue); }
+
+/* ── Hero ─────────────────────────────────── */
+#hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 0 48px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,120,212,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,120,212,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(60px); }
+}
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,120,212,0.06) 0%, transparent 70%);
+  top: 50%; left: -100px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.hero-content { position: relative; z-index: 2; max-width: 720px; }
+.hero-tag {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--blue);
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.2s forwards;
+}
+.hero-name {
+  font-size: clamp(52px, 8vw, 100px);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -3px;
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.4s forwards;
+}
+.hero-name .accent { color: var(--blue); }
+.hero-alias {
+  font-family: var(--mono);
+  font-size: clamp(14px, 2.5vw, 20px);
+  color: var(--muted);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.6s forwards;
+}
+.hero-alias .blink {
+  color: var(--green);
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.hero-desc {
+  font-size: 18px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 44px;
+  font-weight: 400;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.8s forwards;
+}
+.hero-btns {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 1s forwards;
+}
+
+/* ── Buttons ──────────────────────────────── */
+.btn {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  padding: 12px 26px;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  background: transparent;
+  text-decoration: none;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--blue);
+  transform: translateX(-100%);
+  transition: transform 0.2s;
+  z-index: -1;
+}
+.btn:hover { color: var(--bg); }
+.btn:hover::before { transform: translateX(0); }
+.btn-ghost { border-color: var(--border); color: var(--muted); }
+.btn-ghost::before { background: var(--border); }
+.btn-ghost:hover { color: var(--text); }
+
+/* ── Hero Stats ───────────────────────────── */
+.hero-stats {
+  position: absolute; right: 48px; bottom: 48px;
+  display: flex; flex-direction: column; gap: 24px;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.2s forwards;
+}
+.stat {
+  text-align: right;
+  border-right: 2px solid var(--blue);
+  padding-right: 16px;
+}
+.stat-num { font-family: var(--mono); font-size: 28px; color: var(--blue); display: block; }
+.stat-label { font-size: 10px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Sections ─────────────────────────────── */
+section { padding: 100px 48px; }
+.section-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--blue);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin-bottom: 64px;
+  line-height: 1;
+}
+.section-title span { color: var(--blue); }
+
+/* ── Reveal ───────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ── About ────────────────────────────────── */
+#about { background: var(--bg2); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.about-text { font-size: 17px; line-height: 1.85; color: var(--muted); }
+.about-text p { margin-bottom: 20px; }
+.about-text strong { color: var(--text); }
+.terminal-box {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.terminal-header {
+  background: var(--border);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.dot-red    { background: #ff5f56; }
+.dot-yellow { background: #ffbd2e; }
+.dot-green  { background: #27c93f; }
+.terminal-title { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 8px; }
+.terminal-body {
+  padding: 24px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 2;
+}
+.t-prompt  { color: var(--blue); }
+.t-cmd     { color: var(--text); }
+.t-out     { color: var(--green); }
+.t-comment { color: var(--muted); }
+
+/* ── Skills ───────────────────────────────── */
+#skills { background: var(--bg); }
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.skill-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 28px;
+  transition: border-color 0.25s, transform 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.skill-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3px; height: 0;
+  background: var(--blue);
+  transition: height 0.3s;
+}
+.skill-card:hover { border-color: var(--blue); transform: translateY(-4px); }
+.skill-card:hover::before { height: 100%; }
+.skill-icon { font-size: 26px; margin-bottom: 12px; }
+.skill-name { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px; letter-spacing: 0.5px; }
+.skill-desc { color: var(--muted); font-size: 14px; margin-bottom: 4px; }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.skill-card:hover .tag { border-color: rgba(0,120,212,0.35); color: var(--blue2); }
+
+/* ── Projects ─────────────────────────────── */
+#projects { background: var(--bg2); }
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+}
+.project-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 32px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.project-card::after {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 40px 40px 0;
+  border-color: transparent var(--blue) transparent transparent;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.project-card:hover { border-color: var(--blue); transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,120,212,0.08); }
+.project-card:hover::after { opacity: 1; }
+.project-featured {
+  border-color: rgba(0,120,212,0.3);
+  background: linear-gradient(135deg, var(--bg3), rgba(0,120,212,0.025));
+}
+.project-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--blue);
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.project-name { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 12px; letter-spacing: -0.5px; }
+.project-desc { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; flex: 1; }
+.project-stack { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.stack-pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 4px 12px;
+  background: rgba(0,120,212,0.07);
+  border: 1px solid rgba(0,120,212,0.18);
+  color: var(--blue2);
+  letter-spacing: 0.5px;
+}
+.project-link {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 1.5px;
+  transition: color 0.2s;
+  display: inline-flex; align-items: center; gap: 6px;
+  align-self: flex-start;
+}
+.project-link:hover { color: var(--blue); }
+
+/* ── Certs ────────────────────────────────── */
+#certs { background: var(--bg); }
+.certs-list { display: flex; flex-direction: column; gap: 14px; max-width: 800px; }
+.cert-item {
+  display: flex; align-items: center; gap: 20px;
+  padding: 18px 24px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, transform 0.2s;
+}
+.cert-item:hover { border-color: var(--blue); transform: translateX(4px); }
+.cert-thumb {
+  width: 52px; height: 36px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+.cert-thumb:hover { border-color: var(--blue); transform: scale(1.05); }
+.cert-info { flex: 1; min-width: 0; }
+.cert-name { font-size: 16px; font-weight: 600; color: var(--text); }
+.cert-issuer { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; }
+.cert-year { font-family: var(--mono); font-size: 12px; color: var(--blue); white-space: nowrap; }
+.cert-view-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 5px 14px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 1.5px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+.cert-view-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+/* ── Modal ────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.93);
+  z-index: 10000;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(10px);
+}
+.modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+.modal-box {
+  position: relative;
+  max-width: 85vw; max-height: 85vh;
+  border: 1px solid var(--blue);
+  box-shadow: 0 0 80px rgba(0,120,212,0.15);
+}
+.modal-box img {
+  display: block;
+  max-width: 100%; max-height: 85vh;
+  object-fit: contain;
+}
+.modal-close {
+  position: absolute; top: -16px; right: -16px;
+  width: 36px; height: 36px;
+  background: var(--blue);
+  color: var(--bg);
+  border: none; cursor: pointer;
+  font-size: 16px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  transition: background 0.2s;
+}
+.modal-close:hover { background: var(--blue2); }
+.modal-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(8,11,15,0.92);
+  padding: 10px 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--blue);
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Contact ──────────────────────────────── */
+#contact {
+  background: var(--bg2);
+  text-align: center;
+}
+.contact-sub {
+  font-size: 18px;
+  color: var(--muted);
+  margin-bottom: 48px;
+  max-width: 500px;
+  margin-left: auto; margin-right: auto;
+  line-height: 1.7;
+}
+.contact-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+/* ── Footer ───────────────────────────────── */
+footer {
+  padding: 32px 48px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-text { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.footer-text span { color: var(--blue); }
+
+/* ── Responsive ───────────────────────────── */
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  #hero { padding: 0 20px; padding-top: 80px; min-height: 100svh; }
+  .hero-stats { display: none; }
+  section { padding: 72px 20px; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .cert-item { flex-wrap: wrap; gap: 12px; }
+  .cert-year { order: -1; }
+  footer { flex-direction: column; gap: 10px; text-align: center; padding: 24px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ── Nav ── -->
+<nav>
+  <a href="#hero" class="nav-logo">HAMID<span> SHAFIQ</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certs">Certs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#about"    onclick="closeMobile()">About</a></li>
+    <li><a href="#skills"   onclick="closeMobile()">Skills</a></li>
+    <li><a href="#projects" onclick="closeMobile()">Projects</a></li>
+    <li><a href="#certs"    onclick="closeMobile()">Certs</a></li>
+    <li><a href="#contact"  onclick="closeMobile()">Contact</a></li>
+  </ul>
+</div>
+
+<!-- ── Hero ── -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-tag">// INITIALIZING PROFILE_v2.0</div>
+    <h1 class="hero-name">
+      <span class="accent">Hamid</span><br>Shafiq
+    </h1>
+    <div class="hero-alias">
+      &gt; BS Cybersecurity &nbsp;|&nbsp; UOH '28 &nbsp;|&nbsp; Pakistan<span class="blink">_</span>
+    </div>
+    <p class="hero-desc">
+      Penetration tester. CTF competitor. Hardware hacker. Building offensive and defensive security systems from the ground up.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn">View Projects</a>
+      <a href="https://github.com/HamidShafiq1" target="_blank" rel="noopener" class="btn btn-ghost">GitHub →</a>
+      <a href="https://drive.google.com/file/d/1jWS8cUS2G3vkB5y-ZCqcjznpUo3auhjD/view?usp=sharing" target="_blank" rel="noopener" class="btn btn-ghost">CV ↓</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">4th</span>
+      <span class="stat-label">Semester</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">CTF</span>
+      <span class="stat-label">Player</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">6+</span>
+      <span class="stat-label">Projects</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── About ── -->
+<section id="about">
+  <div class="reveal">
+    <div class="section-label">// 01</div>
+    <h2 class="section-title">WHO I<span> AM</span></h2>
+  </div>
+  <div class="about-grid reveal reveal-delay-1">
+    <div class="about-text">
+      <p>I'm <strong>Hamid Shafiq</strong> — a Cybersecurity student at the <strong>University of Haripur</strong>, specializing in ethical hacking and system defense. My work focuses on the intersection of network analysis and security automation using <strong>Kali Linux, Wireshark, and Nmap.</strong></p>
+      <p>Beyond theory, I build practical Python-based tools — packet sniffers, attack simulators, automated exploit frameworks — to address <strong>real-world vulnerabilities</strong>. I compete in CTFs, build hardware attack devices, and run malware simulations in controlled lab environments.</p>
+      <p>The objective: continuous technical refinement toward high-fidelity systems that can both attack and defend modern threat surfaces.</p>
+    </div>
+    <div class="terminal-box">
+      <div class="terminal-header">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <span class="terminal-title">hamid@kali ~ % whoami</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">$ </span><span class="t-cmd">cat profile.json</span></div>
+        <div class="t-out">Name       : Hamid Shafiq</div>
+        <div class="t-out">Location   : Wah Cantonment, Punjab, PK</div>
+        <div class="t-out">University : University of Haripur</div>
+        <div class="t-out">Degree     : BS Cybersecurity (2024–2028)</div>
+        <div class="t-out">Semester   : 4th</div>
+        <br>
+        <div><span class="t-prompt">$ </span><span class="t-cmd">cat languages.txt</span></div>
+        <div class="t-out">Urdu [native] | English [fluent]</div>
+        <div class="t-out">Punjabi [conversational]</div>
+        <br>
+        <div><span class="t-prompt">$ </span><span class="t-cmd">cat mission.txt</span></div>
+        <div class="t-comment"># Secure. Analyze. Exploit. Repeat.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Skills ── -->
+<section id="skills">
+  <div class="reveal">
+    <div class="section-label">// 02</div>
+    <h2 class="section-title">WHAT I<span> DO</span></h2>
+  </div>
+  <div class="skills-grid reveal reveal-delay-1">
+    <div class="skill-card">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">Network Security</div>
+      <div class="skill-desc">Attack detection, traffic analysis, protocol exploitation</div>
+      <div class="skill-tags">
+        <span class="tag">Wireshark</span><span class="tag">Scapy</span><span class="tag">Nmap</span><span class="tag">Packet Tracer</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🦠</div>
+      <div class="skill-name">Malware Analysis</div>
+      <div class="skill-desc">Static/dynamic analysis, MBR manipulation, ransomware behavior</div>
+      <div class="skill-tags">
+        <span class="tag">x86 ASM</span><span class="tag">C</span><span class="tag">IDA</span><span class="tag">Ghidra</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔍</div>
+      <div class="skill-name">Digital Forensics</div>
+      <div class="skill-desc">Evidence acquisition, memory forensics, artifact analysis</div>
+      <div class="skill-tags">
+        <span class="tag">Autopsy</span><span class="tag">FTK</span><span class="tag">Volatility</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">💻</div>
+      <div class="skill-name">Penetration Testing</div>
+      <div class="skill-desc">Web app testing, exploitation, structured reporting</div>
+      <div class="skill-tags">
+        <span class="tag">Metasploit</span><span class="tag">Burp Suite</span><span class="tag">DVWA</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">📡</div>
+      <div class="skill-name">Wireless Security</div>
+      <div class="skill-desc">Wi-Fi deauth, BLE exploitation, protocol analysis</div>
+      <div class="skill-tags">
+        <span class="tag">ESP32</span><span class="tag">BLE</span><span class="tag">WPA2</span><span class="tag">Aircrack</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔧</div>
+      <div class="skill-name">Hardware Hacking</div>
+      <div class="skill-desc">Embedded systems, HID attacks, hardware implants</div>
+      <div class="skill-tags">
+        <span class="tag">Arduino</span><span class="tag">ESP32</span><span class="tag">C++</span><span class="tag">HID</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Projects ── -->
+<section id="projects">
+  <div class="reveal">
+    <div class="section-label">// 03</div>
+    <h2 class="section-title">WHAT I'VE<span> BUILT</span></h2>
+  </div>
+  <div class="projects-grid reveal reveal-delay-1">
+    <div class="project-card project-featured">
+      <div class="project-badge">🏆 2nd Place — Techon</div>
+      <div class="project-name">SYN Flood Mitigation System</div>
+      <p class="project-desc">Real-time detection and mitigation of SYN flood DDoS attacks using adaptive packet analysis and rate limiting. Competition winner.</p>
+      <div class="project-stack">
+        <span class="stack-pill">Python</span><span class="stack-pill">Scapy</span><span class="stack-pill">Networking</span>
+      </div>
+      <a href="https://github.com/MAK554267/SYN-Flood-Mitigation" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+    <div class="project-card">
+      <div class="project-badge">📡 Wireless Security</div>
+      <div class="project-name">Blackout 2.4</div>
+      <p class="project-desc">ESP32-based Wi-Fi deauthentication tool for wireless security research and network stress testing.</p>
+      <div class="project-stack">
+        <span class="stack-pill">ESP32</span><span class="stack-pill">C++</span><span class="stack-pill">Wi-Fi</span>
+      </div>
+      <a href="https://github.com/MAK554267/Blackout-2.4" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+    <div class="project-card">
+      <div class="project-badge">🦆 Hardware Hacking</div>
+      <div class="project-name">BLE Rubber Ducky</div>
+      <p class="project-desc">Bluetooth Low Energy HID attack device on ESP32 — wirelessly emulates keyboard payloads for physical security testing.</p>
+      <div class="project-stack">
+        <span class="stack-pill">ESP32</span><span class="stack-pill">BLE</span><span class="stack-pill">HID</span>
+      </div>
+      <a href="https://github.com/MAK554267/BLE-Rubber-Ducky-with-without-Screen" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+    <div class="project-card">
+      <div class="project-badge">💀 Malware Research</div>
+      <div class="project-name">MBR Bootkit + Ransomware Sim</div>
+      <p class="project-desc">Educational simulation of MBR manipulation and ransomware behavior for malware research and analysis training.</p>
+      <div class="project-stack">
+        <span class="stack-pill">Assembly</span><span class="stack-pill">C</span><span class="stack-pill">Forensics</span>
+      </div>
+      <a href="https://github.com/MAK554267/Bootkit-Development-MBR-Infection-and-Ransomware-Simulation" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+    <div class="project-card">
+      <div class="project-badge">🛡️ Blue Team</div>
+      <div class="project-name">WAF Deployment</div>
+      <p class="project-desc">Dockerized Web Application Firewall using Apache + ModSecurity + OWASP CRS, tested against DVWA attacks.</p>
+      <div class="project-stack">
+        <span class="stack-pill">Docker</span><span class="stack-pill">ModSecurity</span><span class="stack-pill">OWASP</span>
+      </div>
+      <a href="https://github.com/MAK554267/Secure-Web-Application-Deployment-WAF-" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+    <div class="project-card">
+      <div class="project-badge">🤖 NLP / ML</div>
+      <div class="project-name">Fake Review Detection</div>
+      <p class="project-desc">NLP-based system to detect fake and manipulated product reviews using machine learning classification.</p>
+      <div class="project-stack">
+        <span class="stack-pill">Python</span><span class="stack-pill">NLP</span><span class="stack-pill">ML</span>
+      </div>
+      <a href="https://github.com/MAK554267/Fake-Review-Detection-NLP-Project" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Certs ── -->
+<section id="certs">
+  <div class="reveal">
+    <div class="section-label">// 04</div>
+    <h2 class="section-title">WHAT I'VE<span> UNLOCKED</span></h2>
+  </div>
+  <div class="certs-list reveal reveal-delay-1">
+    <div class="cert-item">
+      <img src="assets/certs/Fundamentals of Game Hacking Development.jpg" alt="Game Hacking Cert" class="cert-thumb" loading="lazy"
+           onclick="openModal('assets/certs/Fundamentals of Game Hacking Development.jpg','Fundamentals of Game Hacking Development — RED TEAM LEADERS')"/>
+      <div class="cert-info">
+        <div class="cert-name">Fundamentals of Game Hacking Development</div>
+        <div class="cert-issuer">RED TEAM LEADERS</div>
+      </div>
+      <div class="cert-year">Oct 30, 2025</div>
+      <button class="cert-view-btn" onclick="openModal('assets/certs/Fundamentals of Game Hacking Development.jpg','Fundamentals of Game Hacking Development — RED TEAM LEADERS')">VIEW →</button>
+    </div>
+    <div class="cert-item">
+      <img src="assets/certs/Foundations-of-Cybersecurity.jpg" alt="Google Cybersecurity Cert" class="cert-thumb" loading="lazy"
+           onclick="openModal('assets/certs/Foundations-of-Cybersecurity.jpg','Foundations of Cybersecurity — Google Coursera')"/>
+      <div class="cert-info">
+        <div class="cert-name">Foundations of Cybersecurity</div>
+        <div class="cert-issuer">Google Coursera</div>
+      </div>
+      <div class="cert-year">Jul 8, 2025</div>
+      <button class="cert-view-btn" onclick="openModal('assets/certs/Foundations-of-Cybersecurity.jpg','Foundations of Cybersecurity — Google Coursera')">VIEW →</button>
+    </div>
+    <div class="cert-item">
+      <img src="assets/certs/Play-It-Safe-Manage-Security-Risks.jpg" alt="Security Risks Cert" class="cert-thumb" loading="lazy"
+           onclick="openModal('assets/certs/Play-It-Safe-Manage-Security-Risks.jpg','Play It Safe: Manage Security Risks — Google Coursera')"/>
+      <div class="cert-info">
+        <div class="cert-name">Play It Safe: Manage Security Risks</div>
+        <div class="cert-issuer">Google Coursera</div>
+      </div>
+      <div class="cert-year">Jul 13, 2025</div>
+      <button class="cert-view-btn" onclick="openModal('assets/certs/Play-It-Safe-Manage-Security-Risks.jpg','Play It Safe: Manage Security Risks — Google Coursera')">VIEW →</button>
+    </div>
+    <div class="cert-item">
+      <img src="assets/certs/LFS101.jpg" alt="Linux Foundation Cert" class="cert-thumb" loading="lazy"
+           onclick="openModal('assets/certs/LFS101.jpg','Introduction to Linux LFS101 — The Linux Foundation')"/>
+      <div class="cert-info">
+        <div class="cert-name">Introduction to Linux LFS101</div>
+        <div class="cert-issuer">The Linux Foundation</div>
+      </div>
+      <div class="cert-year">Oct 2025</div>
+      <button class="cert-view-btn" onclick="openModal('assets/certs/LFS101.jpg','Introduction to Linux LFS101 — The Linux Foundation')">VIEW →</button>
+    </div>
+    <div class="cert-item">
+      <img src="assets/certs/ICYS-CISCO.png" alt="Cisco Cybersecurity Cert" class="cert-thumb" loading="lazy"
+           onclick="openModal('assets/certs/ICYS-CISCO.png','Introduction to Cybersecurity — Cisco Networking Academy')"/>
+      <div class="cert-info">
+        <div class="cert-name">Introduction to Cybersecurity</div>
+        <div class="cert-issuer">Cisco Networking Academy</div>
+      </div>
+      <div class="cert-year">Feb 28, 2026</div>
+      <button class="cert-view-btn" onclick="openModal('assets/certs/ICYS-CISCO.png','Introduction to Cybersecurity — Cisco Networking Academy')">VIEW →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── Cert Modal ── -->
+<div class="modal-overlay" id="certModal" onclick="handleModalClick(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    <img id="modalImg" src="" alt="Certificate"/>
+    <div class="modal-label" id="modalLabel"></div>
+  </div>
+</div>
+
+<!-- ── Contact ── -->
+<section id="contact">
+  <div class="reveal">
+    <div class="section-label">// 05</div>
+    <h2 class="section-title" style="margin-bottom:20px;">Let's<span> Connect</span></h2>
+    <p class="contact-sub">Advancing digital integrity through proactive threat mitigation and system hardening.</p>
+    <div class="contact-links">
+      <a href="https://github.com/HamidShafiq1" target="_blank" rel="noopener" class="btn">GitHub</a>
+      <a href="https://www.linkedin.com/in/hamidshafiq/" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
+      <a href="mailto:thehamidfr@gmail.com" class="btn">Email</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-text">© 2026 <span>Hamid Shafiq</span></div>
+  <div class="footer-text">Built with <span>HTML + CSS</span></div>
+</footer>
+
+<script>
+// ── Cursor ──────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 5 + 'px';
+  cursor.style.top  = my - 5 + 'px';
+});
+(function animateRing() {
+  rx += (mx - rx - 16) * 0.15;
+  ry += (my - ry - 16) * 0.15;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animateRing);
+})();
+
+// ── Scroll Reveal ────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+
+// ── Mobile Nav ───────────────────────────────
+const navToggle  = document.getElementById('navToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+navToggle.addEventListener('click', () => {
+  navToggle.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+});
+function closeMobile() {
+  navToggle.classList.remove('open');
+  mobileMenu.classList.remove('open');
+}
+
+// ── Certificate Modal ────────────────────────
+function openModal(src, label) {
+  document.getElementById('modalImg').src     = src;
+  document.getElementById('modalLabel').textContent = label;
+  document.getElementById('certModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('certModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleModalClick(e) {
+  if (e.target === document.getElementById('certModal')) closeModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── Active nav link on scroll ────────────────
+const sections = document.querySelectorAll('section[id]');
+const navAs    = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navAs.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? 'var(--blue)' : '';
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

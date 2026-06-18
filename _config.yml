@@ -1,0 +1,7 @@
+# GitHub Pages configuration
+# No Jekyll theme — pure static HTML
+exclude:
+  - README.md
+  - "*.sh"
+
+plugins: []
