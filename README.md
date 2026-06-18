@@ -53,7 +53,7 @@ Live portfolio site built with pure HTML, CSS, and vanilla JS — no frameworks,
 ### 🔢 Scientific Calculator (C++17)
 Multi-file C++17 scientific calculator with live GitHub Pages web interface. Covers modular design, OOP principles, and clean build architecture.  
 `C++17` `OOP` `GitHub Pages` `Multi-file Architecture`  
-[[[🔗 hamidshafiq7.github.io/scientific-calculator/](https://github.com/hamidshafiq7.github.io/scientific-calculator/)](https://hamidshafiq7.github.io/scientific-calculator/)](https://hamidshafiq7.github.io/scientific-calculator/)
+[🔗 hamidshafiq7.github.io/scientific-calculator/](https://github.com/hamidshafiq7.github.io/scientific-calculator/)]
 
 ---
 
