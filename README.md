@@ -9,7 +9,7 @@
 **Hamid Shafiq**  
 Cybersecurity Student · Ethical Hacking · OSINT · Offensive Security  
 
-[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=flat&logo=githubpages&logoColor=white)](https://hamidshafiq1.github.io)
+[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=flat&logo=githubpages&logoColor=white)](https://hamidshafiq7.github.io)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hamidshafiq/)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/HamidShafiq7)
 [![Email](https://img.shields.io/badge/Email-D14836?style=flat&logo=gmail&logoColor=white)](mailto:thehamidfr@gmail.com)
@@ -25,7 +25,6 @@ Cybersecurity Student · Ethical Hacking · OSINT · Offensive Security
 - 🏴 CTF Competitor — Team **0UTL4W3D**
 - 📍 Based in Wah Cantt, Punjab, Pakistan
 - 🌱 Currently exploring: Linux internals, exploit development, and web security
-- 💼 Open to internships in Penetration Testing, Secure Development & Cybersecurity Research
 
 ---
 
@@ -54,7 +53,7 @@ Live portfolio site built with pure HTML, CSS, and vanilla JS — no frameworks,
 ### 🔢 Scientific Calculator (C++17)
 Multi-file C++17 scientific calculator with live GitHub Pages web interface. Covers modular design, OOP principles, and clean build architecture.  
 `C++17` `OOP` `GitHub Pages` `Multi-file Architecture`  
-[🔗 hamidshafiq1/scientific-calculator-cpp](https://github.com/hamidshafiq7/scientific-calculator)
+[🔗 hamidshafiq7/scientific-calculator-cpp](https://github.com/hamidshafiq7/scientific-calculator)
 
 ---
 
@@ -74,11 +73,11 @@ Hands-on MySQL labs covering DDL/DML operations, table design, INSERT/UPDATE/DEL
 
 | Certificate | Issuer |
 |-------------|--------|
-| Fundamentals of Game Hacking Development | — |
-| Foundations of Cybersecurity | Google |
-| Play It Safe: Manage Security Risks | Google |
+| Summer School AI/ML | United Latino Students Association (Cohere Labs) |
+| Foundations of log analysis for cyber defense | CourseStack, Inc |
+| Introduction to Critical Infrastructure Protection | OPSWAT Academy |
 | Introduction to Linux (LFS101) | Linux Foundation |
-| Introduction to Cybersecurity (ICYS) | Cisco |
+| CompTIA Security+ 701 | Infosec (Coursera) |
 
 ---
 
