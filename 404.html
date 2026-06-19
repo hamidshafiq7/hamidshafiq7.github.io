@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>404 — Page Not Found</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:     #000000;
+  --text:   #f0f6fc;
+  --muted:  #a1a9b3;
+  --mono:   'Share Tech Mono', monospace;
+  --sans:   'Rajdhani', sans-serif;
+
+  /* Glassmorphism Variables */
+  --glass-bg: rgba(20, 20, 20, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-blur: blur(5px);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+  --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  cursor: none;
+  padding: 24px;
+}
+
+/* ── 3D Sphere Background Elements ── */
+.bg-sphere {
+  position: fixed;
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, #555555, #0a0a0a 60%, #000000 100%);
+  box-shadow: inset -10px -10px 20px rgba(0,0,0,0.9), 0 20px 40px rgba(0,0,0,0.8);
+  animation: floatSphere 15s infinite ease-in-out alternate;
+}
+.sphere-1 { width: 280px; height: 280px; top: 15%; left: 20%; animation-delay: 0s; }
+.sphere-2 { width: 350px; height: 350px; bottom: 10%; right: 15%; animation-delay: -5s; }
+.sphere-3 { width: 120px; height: 120px; top: 50%; right: 40%; animation-delay: -10s; filter: blur(2px); }
+.sphere-4 { width: 180px; height: 180px; bottom: 30%; left: 10%; animation-delay: -7s; }
+
+@keyframes floatSphere {
+  0% { transform: translateY(0px) translateX(0px); }
+  100% { transform: translateY(-40px) translateX(20px); }
+}
+
+/* ── Cursor ── */
+.cursor {
+  width: 6px; height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  width: 24px; height: 24px;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.15s ease;
+  opacity: 0.6;
+}
+@media (hover: none) {
+  .cursor, .cursor-ring { display: none; }
+  body { cursor: auto; }
+}
+
+/* ── Container ── */
+.container { 
+  max-width: 520px; 
+  padding: 60px 40px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Window Controls ── */
+.window-controls {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  gap: 6px;
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-red    { background: #ff5f56; }
+.dot-yellow { background: #ffbd2e; }
+.dot-green  { background: #27c93f; }
+
+/* ── Typography ── */
+.error-code {
+  font-family: var(--mono);
+  font-size: clamp(80px, 20vw, 140px);
+  color: rgba(255, 255, 255, 0.15);
+  line-height: 1;
+  margin-bottom: -10px;
+  display: block;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+
+h1 { 
+  font-size: 32px; 
+  font-weight: 700; 
+  margin-bottom: 12px; 
+  letter-spacing: -1px; 
+}
+
+p { 
+  font-family: var(--mono); 
+  font-size: 15px; 
+  color: var(--muted); 
+  margin-bottom: 40px; 
+  line-height: 1.8; 
+}
+
+/* ── Button ── */
+.btn {
+  font-family: var(--mono); 
+  font-size: 12px; 
+  letter-spacing: 1.5px;
+  padding: 14px 28px; 
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  color: var(--text); 
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  display: inline-block;
+}
+.btn:hover { 
+  background: rgba(255, 255, 255, 0.15); 
+  transform: translateY(-2px); 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5); 
+}
+</style>
+</head>
+<body>
+
+<div class="bg-sphere sphere-1"></div>
+<div class="bg-sphere sphere-2"></div>
+<div class="bg-sphere sphere-3"></div>
+<div class="bg-sphere sphere-4"></div>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="container">
+  <div class="window-controls">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+  </div>
+  <span class="error-code">404</span>
+  <h1>Page Not Found</h1>
+  <p>The path you requested does not exist.</p>
+  <a href="/" class="btn">← Return Home</a>
+</div>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 3 + 'px'; cursor.style.top  = my - 3 + 'px';
+});
+(function animateRing() {
+  rx += (mx - rx - 12) * 0.15; ry += (my - ry - 12) * 0.15;
+  ring.style.left = rx + 'px'; ring.style.top  = ry + 'px';
+  requestAnimationFrame(animateRing);
+})();
+</script>
+</body>
+</html>

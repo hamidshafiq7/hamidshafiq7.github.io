@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Hamid Shafiq — BS Cybersecurity student, penetration tester, CTF player, hardware hacker. University of Haripur '28."/>
+<meta name="keywords" content="Hamid Shafiq, cybersecurity, penetration testing, CTF, ethical hacking, Pakistan"/>
+<meta property="og:title" content="Hamid Shafiq | Cybersecurity"/>
+<meta property="og:description" content="BS Cybersecurity @ UOH '28 — Pen tester, CTF player, hardware hacker."/>
+<meta property="og:url" content="https://hamidshafiq7.github.io"/>
+<meta property="og:type" content="website"/>
+<title>Hamid Shafiq | Cybersecurity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<style>
+:root {
+  --bg:     #000000;
+  --blue:   #0078d4;
+  --blue2:  #2b88d8;
+  --green:  #39ff14;
+  --text:   #f0f6fc;
+  --muted:  #a1a9b3;
+  --mono:   'Share Tech Mono', monospace;
+  --sans:   'Rajdhani', sans-serif;
+
+  /* Glassmorphism Variables */
+  --glass-bg: rgba(20, 20, 20, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-blur: blur(5px);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+  --glass-hover-bg: rgba(35, 35, 35, 0.55);
+  --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── 3D Sphere Background Elements ── */
+.bg-sphere {
+  position: fixed;
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, #555555, #0a0a0a 60%, #000000 100%);
+  box-shadow: inset -10px -10px 20px rgba(0,0,0,0.9), 0 20px 40px rgba(0,0,0,0.8);
+  animation: floatSphere 15s infinite ease-in-out alternate;
+}
+.sphere-1 { width: 280px; height: 280px; top: 15%; left: 20%; animation-delay: 0s; }
+.sphere-2 { width: 350px; height: 350px; bottom: 10%; right: 15%; animation-delay: -5s; }
+.sphere-3 { width: 120px; height: 120px; top: 50%; right: 40%; animation-delay: -10s; filter: blur(2px); }
+.sphere-4 { width: 180px; height: 180px; bottom: 30%; left: 10%; animation-delay: -7s; }
+
+@keyframes floatSphere {
+  0% { transform: translateY(0px) translateX(0px); }
+  100% { transform: translateY(-40px) translateX(20px); }
+}
+
+/* ── Cursor ── */
+.cursor {
+  width: 6px; height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  width: 24px; height: 24px;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.15s ease;
+  opacity: 0.6;
+}
+@media (hover: none) {
+  .cursor, .cursor-ring { display: none; }
+  body { cursor: auto; }
+}
+
+/* ── Nav ── */
+nav {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 64px); max-width: 1200px;
+  padding: 16px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--glass-shadow);
+  z-index: 500;
+  transition: var(--transition-smooth);
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 18px;
+  color: var(--text);
+  letter-spacing: 2px;
+  text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.window-controls { display: flex; gap: 6px; margin-right: 12px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-red    { background: #ff5f56; }
+.dot-yellow { background: #ffbd2e; }
+.dot-green  { background: #27c93f; }
+
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a:hover { color: #fff; }
+
+/* ── Hamburger ── */
+.nav-toggle {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 4px;
+}
+.nav-toggle span {
+  display: block; width: 22px; height: 1px;
+  background: var(--text); transition: all 0.3s;
+}
+.nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+.mobile-menu {
+  display: none; position: fixed; top: 80px; left: 32px; right: 32px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 24px; z-index: 499;
+  box-shadow: var(--glass-shadow);
+}
+.mobile-menu.open { display: block; animation: fadeIn 0.3s ease; }
+.mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+.mobile-menu a {
+  font-family: var(--mono); font-size: 14px; color: var(--muted);
+  text-decoration: none; letter-spacing: 2px; transition: color 0.3s;
+}
+.mobile-menu a:hover { color: #fff; }
+
+/* ── Hero ── */
+#hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: 0 48px; position: relative;
+}
+.hero-content { position: relative; z-index: 2; max-width: 720px; }
+.hero-tag {
+  font-family: var(--mono); font-size: 12px; color: rgba(255,255,255,0.5);
+  letter-spacing: 4px; margin-bottom: 20px; opacity: 0;
+  animation: fadeUp 0.6s ease 0.2s forwards;
+}
+.hero-name {
+  font-size: clamp(52px, 8vw, 100px); font-weight: 700; line-height: 0.92;
+  letter-spacing: -2px; margin-bottom: 12px; opacity: 0;
+  animation: fadeUp 0.6s ease 0.4s forwards;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.8);
+}
+.hero-alias {
+  font-family: var(--mono); font-size: clamp(14px, 2.5vw, 18px);
+  color: var(--muted); margin-bottom: 28px; opacity: 0;
+  animation: fadeUp 0.6s ease 0.6s forwards;
+}
+.hero-alias .blink { color: var(--text); animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.hero-desc {
+  font-size: 18px; color: var(--muted); line-height: 1.7;
+  max-width: 520px; margin-bottom: 44px; font-weight: 400; opacity: 0;
+  animation: fadeUp 0.6s ease 0.8s forwards;
+}
+.hero-btns {
+  display: flex; gap: 14px; flex-wrap: wrap; opacity: 0;
+  animation: fadeUp 0.6s ease 1s forwards;
+}
+
+/* ── Buttons ── */
+.btn {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 1.5px;
+  padding: 14px 28px; border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  color: var(--text); text-decoration: none;
+  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+.btn-ghost { background: transparent; color: var(--muted); }
+.btn-ghost:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+
+/* ── Sections ── */
+section { padding: 100px 48px; position: relative; z-index: 2; }
+.section-label {
+  font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.4);
+  letter-spacing: 5px; text-transform: uppercase; margin-bottom: 8px;
+}
+.section-title {
+  font-size: clamp(32px, 5vw, 54px); font-weight: 700; letter-spacing: -1px; margin-bottom: 64px; line-height: 1;
+}
+
+/* ── Glass Components ── */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  transition: var(--transition-smooth);
+}
+
+/* ── Reveal ── */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+
+/* ── About ── */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.about-text { font-size: 17px; line-height: 1.85; color: var(--muted); }
+.about-text p { margin-bottom: 20px; }
+.about-text strong { color: var(--text); }
+
+.terminal-box { overflow: hidden; padding-bottom: 8px; }
+.terminal-header {
+  background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--glass-border);
+  padding: 12px 16px; display: flex; align-items: center; gap: 8px;
+}
+.terminal-title { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-left: 8px; }
+.terminal-body { padding: 24px; font-family: var(--mono); font-size: 13px; line-height: 2; color: var(--muted); }
+.t-prompt  { color: var(--green); text-shadow: 0 0 5px rgba(57, 255, 20, 0.4); }
+.t-cmd     { color: var(--text); }
+.t-out     { color: rgba(255,255,255,0.8); }
+.t-comment { color: rgba(255,255,255,0.3); }
+
+/* ── Skills ── */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.skill-card { padding: 28px; position: relative; overflow: hidden; }
+.skill-card:hover { transform: translateY(-6px); background: var(--glass-hover-bg); border-color: rgba(255,255,255,0.2); }
+.skill-icon { font-family: var(--mono); font-size: 16px; margin-bottom: 16px; opacity: 0.8; letter-spacing: 1px; color: var(--text); }
+.skill-name { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.skill-desc { color: var(--muted); font-size: 14px; margin-bottom: 16px; line-height: 1.6; }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag {
+  font-family: var(--mono); font-size: 10px; padding: 4px 12px; border-radius: 4px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+  color: var(--muted); letter-spacing: 0.5px;
+}
+
+/* ── Projects ── */
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
+.project-card { padding: 32px; display: flex; flex-direction: column; }
+.project-card:hover { transform: translateY(-8px); background: var(--glass-hover-bg); border-color: rgba(255,255,255,0.2); }
+.project-badge {
+  font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.6);
+  letter-spacing: 2px; margin-bottom: 14px; text-transform: uppercase;
+}
+.project-name { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.project-desc { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; flex: 1; }
+.project-stack { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.stack-pill {
+  font-family: var(--mono); font-size: 10px; padding: 5px 12px; border-radius: 4px;
+  background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); color: var(--muted);
+}
+.project-link {
+  font-family: var(--mono); font-size: 11px; color: var(--text); text-decoration: none;
+  letter-spacing: 1.5px; display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
+  align-self: flex-start; transition: var(--transition-smooth);
+}
+.project-link:hover { background: rgba(255,255,255,0.1); }
+
+/* ── Certs ── */
+.certs-list { display: flex; flex-direction: column; gap: 16px; max-width: 800px; }
+.cert-item { display: flex; align-items: center; gap: 20px; padding: 20px 24px; }
+.cert-item:hover { transform: translateX(6px); background: var(--glass-hover-bg); border-color: rgba(255,255,255,0.2); }
+.cert-thumb { width: 60px; height: 42px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: var(--transition-smooth); }
+.cert-thumb:hover { transform: scale(1.08); border-color: rgba(255,255,255,0.4); }
+.cert-info { flex: 1; min-width: 0; }
+.cert-name { font-size: 17px; font-weight: 600; color: var(--text); }
+.cert-issuer { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 4px; }
+.cert-year { font-family: var(--mono); font-size: 12px; color: rgba(255,255,255,0.5); }
+.cert-view-btn {
+  font-family: var(--mono); font-size: 10px; padding: 8px 16px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1); color: var(--text); background: transparent;
+  cursor: pointer; transition: var(--transition-smooth); letter-spacing: 1.5px;
+}
+.cert-view-btn:hover { background: rgba(255,255,255,0.1); }
+
+/* ── Modal ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px); z-index: 10000; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
+.modal-box { position: relative; max-width: 85vw; max-height: 85vh; padding: 8px; }
+.modal-box img { display: block; max-width: 100%; max-height: calc(85vh - 40px); border-radius: 8px; }
+.modal-close {
+  position: absolute; top: -16px; right: -16px; width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: var(--transition-smooth);
+}
+.modal-close:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+.modal-label { text-align: center; font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 16px; }
+
+/* ── Contact ── */
+#contact { text-align: center; }
+.contact-sub { font-size: 18px; color: var(--muted); margin-bottom: 48px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+.contact-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+.contact-links .btn i { font-size: 14px; }
+
+/* ── Footer ── */
+footer {
+  padding: 32px 48px; border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(0,0,0,0.6);
+}
+.footer-text { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+/* ── Animations & Media Queries ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+@media (max-width: 768px) {
+  nav { width: 100%; top: 0; border-radius: 0; border-top: none; border-left: none; border-right: none; }
+  .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  #hero { padding: 0 24px; padding-top: 100px; }
+  section { padding: 80px 24px; }
+  .about-grid, .projects-grid { grid-template-columns: 1fr; gap: 40px; }
+  .cert-item { flex-wrap: wrap; gap: 12px; }
+  .cert-year { order: -1; }
+  footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
+  .mobile-menu { left: 16px; right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-sphere sphere-1"></div>
+<div class="bg-sphere sphere-2"></div>
+<div class="bg-sphere sphere-3"></div>
+<div class="bg-sphere sphere-4"></div>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="#hero" class="nav-logo">
+    <div class="window-controls">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+    HAMID SHAFIQ
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certs">Certs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#about"    onclick="closeMobile()">About</a></li>
+    <li><a href="#skills"   onclick="closeMobile()">Skills</a></li>
+    <li><a href="#projects" onclick="closeMobile()">Projects</a></li>
+    <li><a href="#certs"    onclick="closeMobile()">Certs</a></li>
+    <li><a href="#contact"  onclick="closeMobile()">Contact</a></li>
+  </ul>
+</div>
+
+<section id="hero">
+  <div class="hero-content">
+    <h1 class="hero-name">Hamid<br>Shafiq</h1>
+    <div class="hero-alias">
+      &gt; BS Cybersecurity &nbsp;|&nbsp; UOH '28 &nbsp;|&nbsp; Pakistan<span class="blink" style="color: var(--green);">_</span>
+    </div>
+    <p class="hero-desc">
+      Penetration tester. CTF competitor. Hardware hacker. Building offensive and defensive security systems from the ground up.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn">View Projects</a>
+      <a href="https://github.com/HamidShafiq7" target="_blank" rel="noopener" class="btn btn-ghost"><i class="fa-brands fa-github"></i> GitHub →</a>
+      <a href="https://drive.google.com/file/d/1jWS8cUS2G3vkB5y-ZCqcjznpUo3auhjD/view?usp=drive_link" target="_blank" class="btn btn-ghost">CV ↓</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="reveal">
+    <h2 class="section-title">WHO I AM</h2>
+  </div>
+  <div class="about-grid reveal reveal-delay-1">
+    <div class="about-text glass-panel" style="padding: 32px;">
+      <p>I'm <strong>Hamid Shafiq</strong> - a Cybersecurity student at the <strong>University of Haripur</strong>, specializing in ethical hacking and system defense. My work focuses on the intersection of network analysis and security automation using <strong>Kali Linux, Wireshark, and Nmap.</strong></p>
+      <p>Beyond theory, I build practical Python-based tools — packet sniffers, attack simulators, automated exploit frameworks — to address <strong>real-world vulnerabilities</strong>. I compete in CTFs, build hardware attack devices, and run malware simulations in controlled lab environments.</p>
+    </div>
+    <div class="terminal-box glass-panel">
+      <div class="terminal-header">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <span class="terminal-title"><span style="color: var(--green);">hamid@kali</span> ~ % whoami</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">$ </span><span class="t-cmd">cat profile.json</span></div>
+        <div class="t-out">Name       : Hamid Shafiq</div>
+        <div class="t-out">Location   : Wah Cantonment, Punjab, PK</div>
+        <div class="t-out">Degree     : BS Cybersecurity (2024–2028)</div>
+        <br>
+        <div><span class="t-prompt">$ </span><span class="t-cmd">cat mission.txt</span></div>
+        <div class="t-comment"># Secure. Analyze. Exploit. Repeat.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="reveal">
+    <h2 class="section-title">WHAT I DO</h2>
+  </div>
+  <div class="skills-grid reveal reveal-delay-1">
+    <div class="skill-card glass-panel">
+      <div class="skill-name">Network Security</div>
+      <div class="skill-desc">Attack detection, traffic analysis, protocol exploitation</div>
+      <div class="skill-tags">
+        <span class="tag">Wireshark</span><span class="tag">Scapy</span><span class="tag">Nmap</span>
+      </div>
+    </div>
+    <div class="skill-card glass-panel">
+      <div class="skill-name">Malware Analysis</div>
+      <div class="skill-desc">Static/dynamic analysis, MBR manipulation, ransomware behavior</div>
+      <div class="skill-tags">
+        <span class="tag">x86 ASM</span><span class="tag">C</span><span class="tag">IDA</span>
+      </div>
+    </div>
+    <div class="skill-card glass-panel">
+      <div class="skill-name">Penetration Testing</div>
+      <div class="skill-desc">Web app testing, exploitation, structured reporting</div>
+      <div class="skill-tags">
+        <span class="tag">Metasploit</span><span class="tag">Burp Suite</span>
+      </div>
+    </div>
+    <div class="skill-card glass-panel">
+      <div class="skill-name">Hardware Hacking</div>
+      <div class="skill-desc">Embedded systems, HID attacks, hardware implants</div>
+      <div class="skill-tags">
+        <span class="tag">Arduino</span><span class="tag">ESP32</span><span class="tag">C++</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="reveal">
+    <h2 class="section-title">WHAT I'VE BUILT</h2>
+  </div>
+  <div class="projects-grid reveal reveal-delay-1">
+    <div class="project-card glass-panel">
+      <div class="project-badge">3-In-1 Kit</div>
+      <div class="project-name">CyberKit</div>
+      <p class="project-desc">Password strength analyzer, cryptographic hash generator, and Caesar cipher encoder — built with zero dependencies.</p>
+      <div class="project-stack">
+        <span class="stack-pill">Python</span><span class="stack-pill">Html</span>
+      </div>
+      <a href="https://github.com/hamidshafiq7/cyberkit" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+    <div class="project-card glass-panel">
+      <div class="project-badge">For University of Haripur Students Only</div>
+      <div class="project-name">GPA Calculator</div>
+      <p class="project-desc">An official University of Haripur GPA Management System featuring a terminal-based C++ engine.</p>
+      <div class="project-stack">
+        <span class="stack-pill">C++</span><span class="stack-pill">Html</span>
+      </div>
+      <a href="https://github.com/hamidshafiq7/GPA-Calculator" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+    <div class="project-card glass-panel">
+      <div class="project-badge">Network Security</div>
+      <div class="project-name">Basic Network Sniffer</div>
+      <p class="project-desc">A Python-based basic network sniffer developed using Scapy and raw sockets to capture and inspect real-time TCP, UDP, ICMP, DNS, and ARP packets.</p>
+      <div class="project-stack">
+        <span class="stack-pill">Python</span><span class="stack-pill">Scapy</span>
+      </div>
+      <a href="https://github.com/hamidshafiq7/Basic-Network-Sniffer" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+    <div class="project-card glass-panel">
+      <div class="project-badge">Software Development</div>
+      <div class="project-name">Scientific Calculator</div>
+      <p class="project-desc">A C++-based scientific calculator with advanced mathematical functions and a clean user interface.</p>
+      <div class="project-stack">
+        <span class="stack-pill">C++</span><span class="stack-pill">Html</span>
+      </div>
+      <a href="https://github.com/hamidshafiq7/scientific-calculator" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+    <div class="project-card glass-panel">
+      <div class="project-badge">Database Management</div>
+      <div class="project-name">Event Planning & Operations Management System</div>
+      <p class="project-desc">A Flask and MariaDB/MySQL-powered event management DBMS that automates corporate and private bookings, venue allocation, resource tracking, and dynamic financial valuations.</p>
+      <div class="project-stack">
+        <span class="stack-pill">Python</span><span class="stack-pill">Flask</span><span class="stack-pill">MySQL/MariaDB</span>
+      </div>
+      <a href="https://github.com/hamidshafiq7/Event-Management" class="project-link" target="_blank" rel="noopener">→ GitHub</a>
+    </div>
+  </div>
+</section>
+
+<section id="certs">
+  <div class="reveal">
+    <h2 class="section-title">WHAT I'VE UNLOCKED</h2>
+  </div>
+  <div class="certs-list reveal reveal-delay-1">
+         <div class="cert-item glass-panel">
+      <div class="cert-info">
+        <div class="cert-name">CompTIA Security+</div>
+        <div class="cert-issuer">Infosec (Coursera)</div>
+      </div>
+      <div class="cert-year">JUN 2026</div>
+    </div>
+    <div class="cert-item glass-panel">
+      <div class="cert-info">
+        <div class="cert-name">Introduction to Critical Infrastructure Protection</div>
+        <div class="cert-issuer">OPSWAT Academy</div>
+      </div>
+      <div class="cert-year">APR 2026</div>
+    </div>
+    <div class="cert-item glass-panel">
+      <div class="cert-info">
+        <div class="cert-name">Introduction to linux (LFS-101)</div>
+        <div class="cert-issuer">The Linux Foundation</div>
+      </div>
+      <div class="cert-year">SEP 2025</div>
+    </div>
+     <div class="cert-item glass-panel">
+      <div class="cert-info">
+        <div class="cert-name">Foundations of log analysis for cyber defense</div>
+        <div class="cert-issuer">CourseStack, Inc</div>
+      </div>
+      <div class="cert-year">SEP 2025</div>
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="certModal" onclick="handleModalClick(event)">
+  <div class="modal-box glass-panel">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    <img id="modalImg" src="" alt="Certificate"/>
+    <div class="modal-label" id="modalLabel"></div>
+  </div>
+</div>
+
+<section id="contact">
+  <div class="reveal">
+    <h2 class="section-title" style="margin-bottom:20px;">Let's Connect</h2>
+    <p class="contact-sub">Advancing digital integrity through proactive threat mitigation and system hardening.</p>
+    <div class="contact-links">
+      <a href="https://github.com/HamidShafiq7" target="_blank" rel="noopener" class="btn">
+        <i class="fa-brands fa-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/hamidshafiq/" target="_blank" rel="noopener" class="btn">
+        <i class="fa-brands fa-linkedin"></i> LinkedIn
+      </a>
+      <a href="mailto:thehamidfr@gmail.com" class="btn">
+        <i class="fa-solid fa-envelope"></i> Email
+      </a>
+      <a href="https://discord.com/users/YOUR_DISCORD_ID" target="_blank" rel="noopener" class="btn">
+        <i class="fa-brands fa-discord"></i> Discord
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-text">© 2026 Hamid Shafiq</div>
+  <div class="footer-text">thehamidfr@gmail.com</div>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 3 + 'px'; cursor.style.top  = my - 3 + 'px';
+});
+(function animateRing() {
+  rx += (mx - rx - 12) * 0.15; ry += (my - ry - 12) * 0.15;
+  ring.style.left = rx + 'px'; ring.style.top  = ry + 'px';
+  requestAnimationFrame(animateRing);
+})();
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+
+const navToggle  = document.getElementById('navToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+navToggle.addEventListener('click', () => {
+  navToggle.classList.toggle('open'); mobileMenu.classList.toggle('open');
+});
+function closeMobile() { navToggle.classList.remove('open'); mobileMenu.classList.remove('open'); }
+
+function openModal(src, label) {
+  document.getElementById('modalImg').src = src;
+  document.getElementById('modalLabel').textContent = label;
+  document.getElementById('certModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('certModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleModalClick(e) { if (e.target === document.getElementById('certModal')) closeModal(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
